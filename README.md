@@ -1,2 +1,2 @@
-# GM-s-Portfolio
+# GMs_Portfolio
 GwangMin Jeon's Portfolio Page
