@@ -1,612 +1,238 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Researcher Portfolio | AI & Data Analyst</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Inter for English) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Inter"', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#ffffff', 
-                        secondary: '#94a3b8', 
-                        dark: '#050505',
-                        void: '#000000',
-                    },
-                    backgroundImage: {
-                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                    }
-                }
-            }
-        }
-    </script>
+    <title>전광민 | AI Developer & Researcher</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Universe Background */
-        body {
-            background-color: #050505;
-            color: #e2e8f0;
-            overflow-x: hidden;
+        /* CSS Variables for Light & Dark Mode */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --text-muted: #666666;
+            --primary-color: #2b6cb0;
+            --accent-color: #ebf8ff;
+            --card-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --transition: all 0.3s ease;
         }
 
-        /* Star Animation */
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0;
-            animation: twinkle var(--duration) ease-in-out infinite;
-            animation-delay: var(--delay);
+        [data-theme="dark"] {
+            --bg-color: #1a202c;
+            --text-color: #f7fafc;
+            --text-muted: #a0aec0;
+            --primary-color: #63b3ed;
+            --accent-color: #2a4365;
+            --card-bg: #2d3748;
+            --border-color: #4a5568;
         }
 
-        @keyframes twinkle {
-            0% { opacity: 0; transform: translateY(0) scale(0.5); }
-            50% { opacity: var(--opacity); transform: translateY(-10px) scale(1); }
-            100% { opacity: 0; transform: translateY(-20px) scale(0.5); }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); transition: var(--transition); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
 
-        /* Reveal Animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* Navbar */
+        nav { position: fixed; top: 0; width: 100%; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(var(--bg-color), 0.9); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--border-color); }
+        .logo { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); }
+        .theme-toggle { background: none; border: 2px solid var(--primary-color); color: var(--primary-color); padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-weight: 600; transition: var(--transition); }
+        .theme-toggle:hover { background: var(--primary-color); color: #fff; }
 
-        /* Typing Cursor */
-        .typing-cursor::after {
-            content: '';
-            display: inline-block;
-            width: 2px;
-            height: 1em;
-            background-color: white;
-            margin-left: 4px;
-            vertical-align: middle;
-            animation: blink 1s step-end infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Text Glow */
-        .text-glow {
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-
-        /* Glassmorphism Card */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s ease;
-        }
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-5px);
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
-        }
+        /* Container & Layout */
+        .container { max-width: 900px; margin: 0 auto; padding: 100px 20px 40px; }
+        section { margin-bottom: 4rem; opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        section.visible { opacity: 1; transform: translateY(0); }
         
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #000;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
+        h2 { font-size: 1.8rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-color); display: inline-block; padding-bottom: 0.3rem; }
+
+        /* Hero Section */
+        .hero { text-align: center; padding: 4rem 0; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem; word-break: keep-all; }
+        .contact-links a { display: inline-block; margin: 0 10px; padding: 8px 16px; background: var(--accent-color); color: var(--primary-color); border-radius: 8px; font-weight: 600; transition: var(--transition); }
+        .contact-links a:hover { transform: translateY(-3px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+        /* Tabs Interface (Notion Style) */
+        .tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { background: none; border: none; padding: 10px 20px; font-size: 1.1rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: var(--transition); border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Timeline Items */
+        .timeline-item { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; border: 1px solid var(--border-color); transition: var(--transition); cursor: pointer; }
+        .timeline-item:hover { transform: translateX(10px); border-color: var(--primary-color); }
+        .timeline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .timeline-title { font-weight: 700; font-size: 1.1rem; }
+        .timeline-date { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* Publications */
+        .pub-card { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; border-left: 4px solid var(--primary-color); transition: var(--transition); }
+        .pub-card:hover { transform: scale(1.02); box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+        .pub-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .pub-meta { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* Skills */
+        .skills-container { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+        .skill-tag { background: var(--accent-color); color: var(--primary-color); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; transition: var(--transition); cursor: default; }
+        .skill-tag:hover { background: var(--primary-color); color: #fff; transform: translateY(-3px); }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .timeline-header { flex-direction: column; align-items: flex-start; }
+            .timeline-date { margin-top: 5px; }
+            nav { padding: 1rem; }
         }
     </style>
 </head>
-<body class="antialiased selection:bg-white selection:text-black">
+<body>
 
-    <!-- Stars Container -->
-    <div id="stars-container" class="fixed inset-0 z-0 pointer-events-none"></div>
-
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-black/50 backdrop-blur-xl border-b border-white/5 transition-all duration-300" id="navbar">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
-                <div class="flex-shrink-0 cursor-pointer group" onclick="window.scrollTo(0,0)">
-                    <span class="text-2xl font-black text-white tracking-[0.2em] group-hover:text-glow transition-all duration-300">RESEARCHER<span class="text-slate-500">.</span></span>
-                </div>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-10">
-                        <a href="#about" class="text-sm font-medium text-slate-400 hover:text-white transition-colors tracking-widest uppercase">About</a>
-                        <a href="#skills" class="text-sm font-medium text-slate-400 hover:text-white transition-colors tracking-widest uppercase">Skills</a>
-                        <a href="#projects" class="text-sm font-medium text-slate-400 hover:text-white transition-colors tracking-widest uppercase">Projects</a>
-                        <a href="#experience" class="text-sm font-medium text-slate-400 hover:text-white transition-colors tracking-widest uppercase">Experience</a>
-                        <a href="#contact" class="px-6 py-2 rounded-full border border-white/20 text-white hover:bg-white hover:text-black transition-all text-xs font-bold tracking-widest uppercase">Contact</a>
-                    </div>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="-mr-2 flex md:hidden">
-                    <button type="button" onclick="toggleMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-white/10 focus:outline-none">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Dropdown -->
-        <div class="md:hidden hidden bg-black/90 backdrop-blur-xl border-b border-white/10" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
-                <a href="#about" class="hover:bg-white/5 block px-3 py-4 rounded-md text-sm font-light tracking-widest uppercase text-white" onclick="toggleMenu()">About</a>
-                <a href="#skills" class="hover:bg-white/5 block px-3 py-4 rounded-md text-sm font-light tracking-widest uppercase text-white" onclick="toggleMenu()">Skills</a>
-                <a href="#projects" class="hover:bg-white/5 block px-3 py-4 rounded-md text-sm font-light tracking-widest uppercase text-white" onclick="toggleMenu()">Projects</a>
-                <a href="#experience" class="hover:bg-white/5 block px-3 py-4 rounded-md text-sm font-light tracking-widest uppercase text-white" onclick="toggleMenu()">Experience</a>
-                <a href="#contact" class="hover:bg-white block px-3 py-4 rounded-md text-sm font-bold tracking-widest uppercase text-white hover:text-black mt-4 border border-white/20" onclick="toggleMenu()">Contact</a>
-            </div>
-        </div>
+    <nav>
+        <div class="logo">GwangMin.Jeon</div>
+        <button class="theme-toggle" id="themeBtn">Dark Mode</button>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
-        <!-- Background Glow -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/[0.03] rounded-full blur-[120px] -z-10"></div>
-
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal active z-10">
-            <p class="text-slate-500 text-xs md:text-sm mb-6 tracking-[0.5em] uppercase border-b border-white/10 inline-block pb-2">Bridge Between People & Tech</p>
-            <h1 class="text-5xl md:text-8xl font-black text-white mb-8 leading-tight tracking-tight">
-                Bridging Tech & Humanity<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-500 typing-cursor" id="typing-text"></span>
-            </h1>
-            <p class="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-slate-400 mb-12 leading-relaxed font-light">
-                Building on 3 years of research experience in problem-solving and data analysis,<br class="hidden md:block">
-                I aspire to be an expert who delivers real-world value through cutting-edge AI technology.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-6">
-                <a href="#about" class="px-10 py-4 bg-white text-black rounded-full font-bold hover:bg-slate-200 transition-all transform hover:-translate-y-1 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                    Explore More
-                </a>
-                <a href="#projects" class="px-10 py-4 bg-transparent text-white rounded-full font-bold border border-white/30 hover:bg-white/10 hover:border-white transition-all backdrop-blur-sm">
-                    View Projects
-                </a>
+    <div class="container">
+        <section class="hero visible">
+            <h1>전광민 (Jeon GwangMin)</h1>
+            <p>접근성, 장애 정책, 데이터 기반 문제 해결을 전문으로 하는 연구자이자 AI 개발자입니다.<br>사회적 가치를 창출하는 기술 솔루션 개발에 집중하고 있습니다.</p>
+            <div class="contact-links">
+                <a href="mailto:gm97@ajou.ac.kr">Email</a>
+                <a href="https://linkedin.com/in/gm97" target="_blank">LinkedIn</a>
+                <a href="https://www.myportfolio.com" target="_blank">Portfolio</a>
             </div>
-            
-            <!-- Scroll Icon -->
-            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-white/30">
-                <div class="w-[1px] h-12 bg-gradient-to-b from-transparent via-white to-transparent mx-auto mb-2"></div>
-                <span class="text-[10px] tracking-widest uppercase">Scroll</span>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- About Section -->
-    <section id="about" class="py-32 relative">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div class="relative reveal">
-                    <!-- Image Placeholder -->
-                    <div class="aspect-[4/5] rounded-sm bg-black border border-white/10 overflow-hidden relative group">
-                        <!-- Replace with real image -->
-                        <div class="w-full h-full bg-gradient-to-b from-zinc-800 to-black flex items-center justify-center text-7xl text-zinc-700 group-hover:scale-105 transition-transform duration-700">
-                            <i class="fas fa-user-astronaut"></i>
-                        </div>
-                        <!-- Noise Texture Overlay -->
-                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-30"></div>
-                        <div class="absolute inset-0 border border-white/5 pointer-events-none"></div>
+        <section class="visible">
+            <h2>Career & Education</h2>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('exp')">Experience</button>
+                <button class="tab-btn" onclick="switchTab('edu')">Education</button>
+            </div>
+
+            <div id="exp" class="tab-content active">
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <span class="timeline-title">Microsoft AI School | AI·소프트웨어 개발 훈련생</span>
+                        <span class="timeline-date">2025.12 ~ 현재</span>
                     </div>
-                    <!-- Decorative Lines -->
-                    <div class="absolute -top-4 -left-4 w-24 h-24 border-t border-l border-white/20"></div>
-                    <div class="absolute -bottom-4 -right-4 w-24 h-24 border-b border-r border-white/20"></div>
+                    <p style="font-size: 0.95rem; color: var(--text-muted);">사회적 가치 실현을 목표로 한 AI 기반 서비스 프로젝트 진행</p>
                 </div>
-                
-                <div class="reveal delay-200">
-                    <h2 class="text-4xl md:text-5xl font-black text-white mb-8 tracking-tight">About <span class="text-slate-500">Me</span></h2>
-                    <p class="text-lg text-slate-400 mb-8 leading-relaxed font-light">
-                        Hello, I am a researcher with a vision to connect people and technology.<br><br>
-                        I started my career at the <strong class="text-white">Research Institute of the Korea Association of Persons with Physical Disabilities</strong>, where I developed capabilities in defining and solving real-world problems and analyzing data.<br><br>
-                        Currently, I am pursuing a master's degree in <strong class="text-white">Intelligent Software</strong> at the Graduate School of Information and Communication to expand my expertise as an AI specialist.
-                    </p>
-                    
-                    <div class="grid grid-cols-1 gap-px bg-white/10 border border-white/10 overflow-hidden rounded-lg">
-                        <div class="bg-black/80 p-6 flex flex-col md:flex-row md:items-center justify-between hover:bg-white/5 transition-colors group">
-                            <span class="text-slate-500 text-sm tracking-widest uppercase mb-1 md:mb-0 group-hover:text-white transition-colors">Education</span>
-                            <span class="text-white font-medium text-right">M.S. in Intelligent Software (In Progress)</span>
-                        </div>
-                        <div class="bg-black/80 p-6 flex flex-col md:flex-row md:items-center justify-between hover:bg-white/5 transition-colors group">
-                            <span class="text-slate-500 text-sm tracking-widest uppercase mb-1 md:mb-0 group-hover:text-white transition-colors">Core Skills</span>
-                            <span class="text-white font-medium text-right">Data Analysis, Problem Solving, AI Modeling</span>
-                        </div>
-                        <div class="bg-black/80 p-6 flex flex-col md:flex-row md:items-center justify-between hover:bg-white/5 transition-colors group">
-                            <span class="text-slate-500 text-sm tracking-widest uppercase mb-1 md:mb-0 group-hover:text-white transition-colors">Career</span>
-                            <span class="text-white font-medium text-right">Researcher (3 Years)</span>
-                        </div>
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <span class="timeline-title">한국지체장애인협회 | 연구원</span>
+                        <span class="timeline-date">2023.06 ~ 2025.12</span>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="py-32 relative">
-        <!-- Background Gradient -->
-        <div class="absolute inset-0 bg-gradient-to-b from-black via-zinc-900/50 to-black pointer-events-none"></div>
-
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-20 reveal">
-                <span class="text-slate-500 text-xs tracking-[0.3em] uppercase border border-white/10 px-4 py-2 rounded-full mb-6 inline-block">Expertise</span>
-                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Research <span class="text-slate-600">&</span> Skills</h2>
-                <p class="text-slate-400 font-light max-w-2xl mx-auto">Tools and technologies utilized for research and analysis.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- AI & Data Science -->
-                <div class="glass-card p-10 rounded-xl reveal text-center group">
-                    <div class="w-16 h-16 mx-auto bg-white/5 rounded-full flex items-center justify-center text-white mb-8 border border-white/10 group-hover:bg-white group-hover:text-black transition-all duration-500">
-                        <i class="fas fa-brain text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-6 tracking-wide">AI & Data Science</h3>
-                    <ul class="space-y-3 text-slate-400 font-light text-sm">
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>Python</li>
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>PyTorch / TensorFlow</li>
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>Pandas / Numpy</li>
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>Data Visualization</li>
+                    <ul style="font-size: 0.95rem; color: var(--text-muted); margin-left: 1.2rem; margin-top: 0.5rem;">
+                        <li>국가 R&D 사업 참여 및 연구원 행정/회계/기초자료 분석</li>
+                        <li>저상 좌석버스 운영 개선을 위한 5,000명 대규모 실태조사 진행</li>
+                        <li>자율주행 특별교통수단 최적 정류장 선정을 위한 데이터 분석</li>
                     </ul>
                 </div>
-
-                <!-- Research & Analysis -->
-                <div class="glass-card p-10 rounded-xl reveal delay-100 text-center group">
-                    <div class="w-16 h-16 mx-auto bg-white/5 rounded-full flex items-center justify-center text-white mb-8 border border-white/10 group-hover:bg-white group-hover:text-black transition-all duration-500">
-                        <i class="fas fa-microscope text-2xl"></i>
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <span class="timeline-title">대한민국 육군 의장대 | 교관 (병장)</span>
+                        <span class="timeline-date">2017.03 ~ 2018.12</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-6 tracking-wide">Research</h3>
-                    <ul class="space-y-3 text-slate-400 font-light text-sm">
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>Problem Solving</li>
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>Quantitative Analysis</li>
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>Technical Writing</li>
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>Project Management</li>
-                    </ul>
-                </div>
-
-                <!-- Tools & Others -->
-                <div class="glass-card p-10 rounded-xl reveal delay-200 text-center group">
-                    <div class="w-16 h-16 mx-auto bg-white/5 rounded-full flex items-center justify-center text-white mb-8 border border-white/10 group-hover:bg-white group-hover:text-black transition-all duration-500">
-                        <i class="fas fa-terminal text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-6 tracking-wide">Tools</h3>
-                    <ul class="space-y-3 text-slate-400 font-light text-sm">
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>Jupyter Notebook</li>
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>Git & GitHub</li>
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>Notion</li>
-                        <li class="flex items-center justify-center gap-2"><span class="w-1 h-1 bg-white rounded-full"></span>SPSS / R</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects/Research Section -->
-    <section id="projects" class="py-32 relative">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-20 reveal border-b border-white/10 pb-8">
-                <div>
-                    <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Featured <span class="text-slate-600">Work</span></h2>
-                    <p class="text-slate-400 font-light">Key research activities and project experiences.</p>
-                </div>
-                <div class="mt-6 md:mt-0">
-                    <span class="text-xs text-white/50 border border-white/20 px-4 py-2 rounded-full uppercase tracking-widest">Total 3 Projects</span>
+                    <p style="font-size: 0.95rem; color: var(--text-muted);">"모범 용사" 선발 및 "우수 훈련병상" 수상</p>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1 -->
-                <article class="glass-card group rounded-sm overflow-hidden reveal">
-                    <div class="h-64 bg-zinc-900 relative overflow-hidden">
-                        <!-- Gradient Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                        <!-- Icon -->
-                        <div class="w-full h-full flex items-center justify-center group-hover:scale-110 transition-transform duration-700">
-                            <i class="fas fa-wheelchair text-6xl text-white/20 group-hover:text-white/40 transition-colors"></i>
-                        </div>
-                        <!-- Badge -->
-                        <div class="absolute top-4 left-4 z-20">
-                            <span class="text-[10px] font-bold px-3 py-1 bg-white text-black uppercase tracking-widest">Research</span>
-                        </div>
+            <div id="edu" class="tab-content">
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <span class="timeline-title">아주대학교 정보통신대학원</span>
+                        <span class="timeline-date">2025.09 ~ 현재</span>
                     </div>
-                    <div class="p-8 border-t border-white/5 relative">
-                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-slate-200 transition-colors">Living Environment Research</h3>
-                        <p class="text-slate-400 text-sm mb-6 line-clamp-3 font-light leading-relaxed">
-                            Conducted surveys and data analysis on disability facilities to establish foundational data for policy proposals and environmental improvements.
-                        </p>
-                        <div class="flex flex-wrap gap-2 pt-4 border-t border-white/10">
-                            <span class="text-xs text-slate-500 uppercase tracking-wider">Data Analysis</span>
-                            <span class="text-xs text-slate-500 uppercase tracking-wider">•</span>
-                            <span class="text-xs text-slate-500 uppercase tracking-wider">Policy</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Project 2 -->
-                <article class="glass-card group rounded-sm overflow-hidden reveal delay-100">
-                    <div class="h-64 bg-zinc-900 relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                        <div class="w-full h-full flex items-center justify-center group-hover:scale-110 transition-transform duration-700">
-                            <i class="fas fa-robot text-6xl text-white/20 group-hover:text-white/40 transition-colors"></i>
-                        </div>
-                        <div class="absolute top-4 left-4 z-20">
-                            <span class="text-[10px] font-bold px-3 py-1 bg-white/20 text-white backdrop-blur-md border border-white/20 uppercase tracking-widest">AI Study</span>
-                        </div>
-                    </div>
-                    <div class="p-8 border-t border-white/5 relative">
-                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-slate-200 transition-colors">Intelligent SW Research</h3>
-                        <p class="text-slate-400 text-sm mb-6 line-clamp-3 font-light leading-relaxed">
-                            Conducting research on data pattern analysis and predictive modeling using state-of-the-art deep learning models.
-                        </p>
-                        <div class="flex flex-wrap gap-2 pt-4 border-t border-white/10">
-                            <span class="text-xs text-slate-500 uppercase tracking-wider">Python</span>
-                            <span class="text-xs text-slate-500 uppercase tracking-wider">•</span>
-                            <span class="text-xs text-slate-500 uppercase tracking-wider">Deep Learning</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Project 3 -->
-                <article class="glass-card group rounded-sm overflow-hidden reveal delay-200">
-                    <div class="h-64 bg-zinc-900 relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                        <div class="w-full h-full flex items-center justify-center group-hover:scale-110 transition-transform duration-700">
-                            <i class="fas fa-chart-line text-6xl text-white/20 group-hover:text-white/40 transition-colors"></i>
-                        </div>
-                        <div class="absolute top-4 left-4 z-20">
-                            <span class="text-[10px] font-bold px-3 py-1 bg-white/20 text-white backdrop-blur-md border border-white/20 uppercase tracking-widest">Side Project</span>
-                        </div>
-                    </div>
-                    <div class="p-8 border-t border-white/5 relative">
-                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-slate-200 transition-colors">Data Viz Dashboard</h3>
-                        <p class="text-slate-400 text-sm mb-6 line-clamp-3 font-light leading-relaxed">
-                            A visualization project utilizing public data to intuitively display facility information for the socially vulnerable.
-                        </p>
-                        <div class="flex flex-wrap gap-2 pt-4 border-t border-white/10">
-                            <span class="text-xs text-slate-500 uppercase tracking-wider">Visualization</span>
-                            <span class="text-xs text-slate-500 uppercase tracking-wider">•</span>
-                            <span class="text-xs text-slate-500 uppercase tracking-wider">Web</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="py-32 relative bg-zinc-900/20">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20 reveal">
-                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Work <span class="text-slate-600">Experience</span></h2>
-            </div>
-
-            <!-- Timeline -->
-            <div class="relative border-l border-white/10 ml-3 md:ml-0 space-y-16">
-                
-                <!-- Experience 1 -->
-                <div class="relative pl-12 md:pl-0 reveal">
-                    <!-- Dot -->
-                    <div class="absolute -left-[5px] top-2 md:left-1/2 md:-ml-[5px] w-[11px] h-[11px] bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)] z-10"></div>
-                    
-                    <div class="md:grid md:grid-cols-2 md:gap-16">
-                        <div class="md:text-right mb-4 md:mb-0">
-                            <span class="text-white font-bold text-xs border border-white/30 px-3 py-1 rounded-full inline-block mb-3">2024.03 - Present</span>
-                            <h3 class="text-2xl font-bold text-white">Graduate Student</h3>
-                            <p class="text-slate-400 font-light mt-1">Intelligent Software Major</p>
-                        </div>
-                        <div class="glass-card p-6 rounded-lg border-l-4 border-l-white">
-                            <ul class="list-none space-y-3 text-slate-300 font-light text-sm">
-                                <li class="flex items-start"><i class="fas fa-check mt-1 mr-3 text-white/50 text-xs"></i>Conducting advanced research to expand expertise as an AI specialist</li>
-                                <li class="flex items-start"><i class="fas fa-check mt-1 mr-3 text-white/50 text-xs"></i>Strengthening capabilities to act as a bridge between technology and people</li>
-                                <li class="flex items-start"><i class="fas fa-check mt-1 mr-3 text-white/50 text-xs"></i>Executing projects involving Deep Learning and Data Mining</li>
-                            </ul>
-                        </div>
-                    </div>
+                    <p style="font-size: 0.95rem; color: var(--text-muted);">인공지능전공 석사 과정</p>
                 </div>
-
-                <!-- Experience 2 -->
-                <div class="relative pl-12 md:pl-0 reveal delay-100">
-                    <div class="absolute -left-[5px] top-2 md:left-1/2 md:-ml-[5px] w-[11px] h-[11px] bg-zinc-800 border border-white/50 rounded-full z-10"></div>
-                    
-                    <div class="md:grid md:grid-cols-2 md:gap-16">
-                        <div class="md:text-right mb-4 md:mb-0">
-                            <span class="text-slate-500 font-bold text-xs border border-white/10 px-3 py-1 rounded-full inline-block mb-3">3 Years</span>
-                            <h3 class="text-2xl font-bold text-slate-300">Researcher</h3>
-                            <p class="text-slate-500 font-light mt-1">Korea Association of<br>Persons with Physical Disabilities</p>
-                        </div>
-                        <div class="glass-card p-6 rounded-lg border-l-4 border-l-white/20">
-                            <ul class="list-none space-y-3 text-slate-400 font-light text-sm">
-                                <li class="flex items-start"><i class="fas fa-check mt-1 mr-3 text-white/20 text-xs"></i>Conducted surveys and research to improve accessibility and living environments</li>
-                                <li class="flex items-start"><i class="fas fa-check mt-1 mr-3 text-white/20 text-xs"></i>Analyzed data and proposed policies to address real-world issues</li>
-                                <li class="flex items-start"><i class="fas fa-check mt-1 mr-3 text-white/20 text-xs"></i>Authored research reports and managed related projects</li>
-                            </ul>
-                        </div>
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <span class="timeline-title">대구대학교 재활과학대학</span>
+                        <span class="timeline-date">2016.03 ~ 2023.02</span>
                     </div>
+                    <p style="font-size: 0.95rem; color: var(--text-muted);">직업재활학과 학사</p>
                 </div>
-
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-32 relative overflow-hidden">
-        <!-- Background Effect -->
-        <div class="absolute bottom-0 left-0 right-0 h-[500px] bg-gradient-to-t from-white/[0.05] to-transparent pointer-events-none"></div>
-
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal relative z-10">
-            <h2 class="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter">Let's <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-600">Connect</span></h2>
-            <p class="text-xl text-slate-400 mb-16 font-light max-w-2xl mx-auto">
-                I am eager to join the journey of creating social value through Data and AI technology.<br>
-                Open to research collaboration or any related discussions.
-            </p>
-
-            <div class="flex flex-col md:flex-row justify-center gap-8">
-                <a href="mailto:email@example.com" class="group relative px-10 py-6 bg-white/5 rounded-none border border-white/20 hover:bg-white hover:text-black transition-all duration-500 overflow-hidden">
-                    <div class="relative z-10 flex flex-col items-center">
-                        <i class="fas fa-envelope text-3xl mb-4 group-hover:scale-110 transition-transform"></i>
-                        <span class="font-bold text-lg uppercase tracking-widest">Email</span>
-                        <span class="text-xs mt-2 opacity-60 group-hover:opacity-100">Send me a message</span>
-                    </div>
-                </a>
-                
-                <a href="https://linkedin.com" target="_blank" class="group relative px-10 py-6 bg-white/5 rounded-none border border-white/20 hover:bg-[#0077b5] hover:text-white hover:border-[#0077b5] transition-all duration-500 overflow-hidden">
-                    <div class="relative z-10 flex flex-col items-center">
-                        <i class="fab fa-linkedin text-3xl mb-4 group-hover:scale-110 transition-transform"></i>
-                        <span class="font-bold text-lg uppercase tracking-widest">LinkedIn</span>
-                        <span class="text-xs mt-2 opacity-60 group-hover:opacity-100">Connect with me</span>
-                    </div>
-                </a>
+        <section class="visible">
+            <h2>Publications (KCI)</h2>
+            <div class="pub-card">
+                <div class="pub-title">저상버스 운전자를 위한 장애인 인식개선 교육 프로그램 개발 연구</div>
+                <div class="pub-meta">재활복지, 29(2), 1–36 | 2025. Do, Y. M., Park, Y. W., Hong, H. K., & Jeon. G. M.</div>
             </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-black border-t border-white/10 py-12">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-            <div class="text-center md:text-left">
-                <p class="text-white font-bold text-lg tracking-widest uppercase">Researcher<span class="text-slate-600">.</span></p>
-                <p class="text-slate-600 text-xs mt-2">
-                    &copy; <span id="year"></span> All rights reserved.
-                </p>
+            <div class="pub-card">
+                <div class="pub-title">지체 및 뇌병변 장애인의 장애인콜택시 이용 행태 분석: 경기도 화성시를 중심으로</div>
+                <div class="pub-meta">재활복지, 28(4), 189–209 | 2025. Do, Y. M., Hong, H. K., Park, Y. W., & Jeon. G. M.</div>
             </div>
-            <div class="flex space-x-8 mt-6 md:mt-0">
-                <a href="#" class="text-slate-500 hover:text-white transition-colors text-xl"><i class="fab fa-github"></i></a>
-                <a href="#" class="text-slate-500 hover:text-white transition-colors text-xl"><i class="fab fa-linkedin"></i></a>
-                <a href="#" class="text-slate-500 hover:text-white transition-colors text-xl"><i class="fas fa-envelope"></i></a>
+            <div class="pub-card">
+                <div class="pub-title">교통약자를 위한 중거리 저상좌석버스 표준 모델 개발을 위한 서비스 수요 분석</div>
+                <div class="pub-meta">재활복지, 28(2), 19–41 | 2024. Do, Y. M., Hong, H. K., Park, J. H., & Jeon. G. M.</div>
             </div>
-        </div>
-    </footer>
+            <div class="pub-card">
+                <div class="pub-title">자율주행 기반 교통약자 이동 지원 서비스 이용자 평가 지표 개발</div>
+                <div class="pub-meta">재활복지, 27(4), 81–103 | 2023. Do, Y. M., Hong, H. K., Park, J. H., & Jeon. G. M.</div>
+            </div>
+        </section>
 
-    <!-- JS Logic -->
+        <section class="visible">
+            <h2>Technical Skills</h2>
+            <div class="skills-container">
+                <span class="skill-tag">Python (Pandas, NumPy)</span>
+                <span class="skill-tag">Machine Learning</span>
+                <span class="skill-tag">CNN</span>
+                <span class="skill-tag">Custom Vision</span>
+                <span class="skill-tag">QGIS (공간 데이터 분석)</span>
+                <span class="skill-tag">데이터 시각화</span>
+                <span class="skill-tag">설문 설계 및 통계 분석</span>
+                <span class="skill-tag">장애 정책 & 보조공학</span>
+            </div>
+        </section>
+    </div>
+
     <script>
-        // 1. Create Stars
-        function createStars() {
-            const container = document.getElementById('stars-container');
-            const starCount = 100;
-
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                
-                const x = Math.random() * 100;
-                const y = Math.random() * 100;
-                const size = Math.random() * 2 + 1;
-                const duration = Math.random() * 3 + 2 + 's';
-                const delay = Math.random() * 5 + 's';
-                const opacity = Math.random() * 0.7 + 0.3;
-
-                star.style.left = `${x}%`;
-                star.style.top = `${y}%`;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.setProperty('--duration', duration);
-                star.style.setProperty('--delay', delay);
-                star.style.setProperty('--opacity', opacity);
-
-                container.appendChild(star);
-            }
-        }
-
-        // 2. Year Update
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        // 3. Toggle Menu
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-
-        // 4. Typing Effect
-        const textElement = document.getElementById('typing-text');
-        const texts = ['I am an AI Researcher', 'I am a Data Analyst', 'I am a Problem Solver'];
-        let textIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-
-        function type() {
-            const currentText = texts[textIndex];
-            
-            if (isDeleting) {
-                textElement.textContent = currentText.substring(0, charIndex - 1);
-                charIndex--;
+        // 1. Dark/Light Mode Toggle
+        const themeBtn = document.getElementById('themeBtn');
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.body.removeAttribute('data-theme');
+                themeBtn.textContent = 'Dark Mode';
             } else {
-                textElement.textContent = currentText.substring(0, charIndex + 1);
-                charIndex++;
+                document.body.setAttribute('data-theme', 'dark');
+                themeBtn.textContent = 'Light Mode';
             }
+        });
 
-            let typeSpeed = isDeleting ? 50 : 100;
-
-            if (!isDeleting && charIndex === currentText.length) {
-                isDeleting = true;
-                typeSpeed = 2000;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                textIndex = (textIndex + 1) % texts.length;
-                typeSpeed = 500;
-            }
-
-            setTimeout(type, typeSpeed);
+        // 2. Tab Switch Logic (Notion DB Views Style)
+        function switchTab(tabId) {
+            // Remove active class from all tabs & contents
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
         }
 
-        // 5. Scroll Animation
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
+        // 3. Scroll Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            observer.observe(el);
-        });
-
-        // 6. Navbar Scroll
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                nav.classList.add('border-b', 'border-white/10', 'bg-black/80');
-                nav.classList.remove('bg-transparent', 'border-transparent');
-            } else {
-                nav.classList.add('bg-transparent', 'border-transparent');
-                nav.classList.remove('border-b', 'border-white/10', 'bg-black/80');
+        document.querySelectorAll('section').forEach(section => {
+            // Remove visible class initially to trigger animation on scroll down
+            if(section.className !== 'hero visible') {
+                section.classList.remove('visible');
             }
-        });
-
-        // Init
-        document.addEventListener('DOMContentLoaded', () => {
-            createStars();
-            type();
-            
-            const nav = document.getElementById('navbar');
-            if (window.scrollY === 0) {
-                nav.classList.add('bg-transparent', 'border-transparent');
-            }
+            observer.observe(section);
         });
     </script>
 </body>
